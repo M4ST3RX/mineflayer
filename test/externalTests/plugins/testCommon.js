@@ -58,6 +58,7 @@ function inject (bot) {
             // dig it
             return digAndResume(position)
           }
+          console.log(expectedBlock.type, '!==', block.type)
           console.log('going to place layer ', y, 'with item ', superflatLayers[y].item)
           // place it
           return placeAndResume(position, superflatLayers[y].item)
@@ -74,8 +75,7 @@ function inject (bot) {
     function placeAndResume (position, item) {
       console.log('place and resume with', item)
       setInventorySlot(36, new Item(item.type, 1, 0), () => {
-        placeBlock(36, position)
-        resume()
+        placeBlock(36, position, resume)
       })
     }
 
@@ -161,7 +161,7 @@ function inject (bot) {
 
   // you need to be in creative mode for this to work
   function setInventorySlot (targetSlot, item, cb) {
-    console.log(new Error().stack)
+    // console.log(new Error().stack)
     console.log('the item is ' + item)
     // TODO FIX
     if (Item.equal(bot.inventory.slots[targetSlot], item)) {
