@@ -30,10 +30,10 @@ function inject (bot) {
   }
 
   const superflatLayers = [
-    new Block(mcData.blocksByName.bedrock.id),
-    new Block(mcData.blocksByName.dirt.id),
-    new Block(mcData.blocksByName.dirt.id),
-    new Block(mcData.blocksByName.grass.id)
+    { block: new Block(mcData.blocksByName.bedrock.id), item: new Item(mcData.itemsByName.bedrock.id) },
+    { block: new Block(mcData.blocksByName.dirt.id), item: new Item(mcData.itemsByName.dirt.id) },
+    { block: new Block(mcData.blocksByName.dirt.id), item: new Item(mcData.itemsByName.dirt.id) },
+    { block: new Block(mcData.blocksByName.grass.id), item: new Item(mcData.itemsByName.grass.id) }
     // and then air
   ]
 
@@ -41,7 +41,7 @@ function inject (bot) {
     console.log('reset blocks to superflat')
     const groundY = 4
     for (let y = groundY + 4; y >= groundY - 1; y--) {
-      const expectedBlock = superflatLayers[y]
+      const expectedBlock = superflatLayers[y].block
       for (let i = 0; i < deltas3x3.length; i++) {
         const position = bot.entity.position.plus(deltas3x3[i])
         position.y = y
@@ -58,7 +58,7 @@ function inject (bot) {
             return digAndResume(position)
           }
           // place it
-          return placeAndResume(position, mcData.itemsByName[expectedBlock.name].id)
+          return placeAndResume(position, superflatLayers[y].item)
         }
       }
     }
@@ -159,16 +159,20 @@ function inject (bot) {
 
   // you need to be in creative mode for this to work
   function setInventorySlot (targetSlot, item, cb) {
-    /*
+    console.log('the item is ' + item)
     // TODO FIX
     if (Item.equal(bot.inventory.slots[targetSlot], item)) {
+      console.log('placing')
+      console.log(bot.inventory.slots[targetSlot])
       // already good to go
       return setImmediate(cb)
-    } */
+    }
+
+    console.log('lolbefore', bot.inventory.slots[targetSlot])
     bot.creative.setInventorySlot(targetSlot, item)
     // TODO: instead of that timeout, it would be better to have a good callback inside setInventorySlot
-    console.log('lol')
-    setTimeout(cb, 1000)
+    console.log('lol', bot.inventory.slots[targetSlot])
+    setTimeout(cb, 2000)
   }
 
   function teleport (position, cb) {
