@@ -38,8 +38,9 @@ function inject (bot) {
     // and then air
   ]
 
+  // eslint-disable-next-line no-unused-vars
   function resetBlocksToSuperflat (cb) {
-    console.log('reset blocks to superflat')
+    // console.log('reset blocks to superflat')
     const groundY = 4
     for (let y = groundY + 4; y >= groundY - 1; y--) {
       const expectedBlock = superflatLayers[y] === undefined ? null : superflatLayers[y].block
@@ -97,7 +98,7 @@ function inject (bot) {
       becomeCreative,
       clearInventory,
       (cb) => {
-        console.log('start flying')
+        // console.log('start flying')
         bot.creative.startFlying()
         teleport(new Vec3(0, 4, 0), cb)
       },
@@ -108,7 +109,7 @@ function inject (bot) {
   }
 
   function becomeCreative (cb) {
-    console.log('become creative')
+    // console.log('become creative')
     setCreativeMode(true, cb)
   }
 
@@ -119,9 +120,9 @@ function inject (bot) {
   function setCreativeMode (value, cb) {
     // this function behaves the same whether we start in creative mode or not.
     // also, creative mode is always allowed for ops, even if server.properties says force-gamemode=true in survival mode.
-    let timeOut = null
+
     function onMessage (jsonMsg) {
-      console.log(jsonMsg)
+      // console.log(jsonMsg)
       switch (jsonMsg.translate) {
         case 'commands.gamemode.success.self':
         case 'gameMode.changed':
@@ -139,7 +140,7 @@ function inject (bot) {
     }
     bot.on('message', onMessage)
     bot.chat(`/gamemode ${value ? 'creative' : 'survival'}`)
-    timeOut = setTimeout(() => {
+    const timeOut = setTimeout(() => {
       bot.removeListener('message', onMessage)
       cb()
     }, 10000)
@@ -162,19 +163,19 @@ function inject (bot) {
   // you need to be in creative mode for this to work
   function setInventorySlot (targetSlot, item, cb) {
     // console.log(new Error().stack)
-    console.log('the item is ' + item)
+    // console.log('the item is ' + item)
     // TODO FIX
     if (Item.equal(bot.inventory.slots[targetSlot], item)) {
-      console.log('placing')
-      console.log(bot.inventory.slots[targetSlot])
+      // console.log('placing')
+      // console.log(bot.inventory.slots[targetSlot])
       // already good to go
       return setImmediate(cb)
     }
 
-    console.log('lolbefore', bot.inventory.slots[targetSlot])
+    // console.log('lolbefore', bot.inventory.slots[targetSlot])
     bot.creative.setInventorySlot(targetSlot, item)
     // TODO: instead of that timeout, it would be better to have a good callback inside setInventorySlot
-    console.log('lol', bot.inventory.slots[targetSlot])
+    // console.log('lol', bot.inventory.slots[targetSlot])
     setTimeout(cb, 2000)
   }
 
@@ -191,7 +192,7 @@ function inject (bot) {
 
   function sayEverywhere (message) {
     bot.chat(message)
-    console.log(message)
+    // console.log(message)
   }
 
   var deltas3x3 = [
@@ -211,7 +212,7 @@ function inject (bot) {
     // check 3x3 chunks around us
     for (let i = 0; i < deltas3x3.length; i++) {
       if (bot.blockAt(bot.entity.position.plus(deltas3x3[i].scaled(32))) == null) {
-        console.log(deltas3x3[i] + 'absent')
+        // console.log(deltas3x3[i] + 'absent')
         // keep wait
         return setTimeout(() => {
           waitForChunksToLoad(cb)

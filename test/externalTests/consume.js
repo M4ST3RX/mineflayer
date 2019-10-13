@@ -3,6 +3,7 @@ const assert = require('assert')
 module.exports = () => (bot, done) => {
   done()
   return // skiped
+  // eslint-disable-next-line no-unreachable
   const Item = require('prismarine-item')(bot.version)
 
   const handler = (m) => {
@@ -36,6 +37,7 @@ module.exports = () => (bot, done) => {
     }
   }
 
+  // eslint-disable-next-line no-unreachable
   bot.test.setInventorySlot(36, new Item(297, 5, 0), () => {
     // Cannot consume if bot.food === 20
     bot.consume((err) => {
