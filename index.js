@@ -74,7 +74,6 @@ function createBot (options = {}) {
     }).map(key => options.plugins[key])
   bot.loadPlugins([...internalPlugins, ...externalPlugins])
 
-  bot.connect(options)
   return bot
 }
 
