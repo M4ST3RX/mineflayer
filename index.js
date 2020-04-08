@@ -56,7 +56,7 @@ function createBot (options = {}) {
   options.plugins = options.plugins || {}
   options.logErrors = options.logErrors === undefined ? true : options.logErrors
   options.loadInternalPlugins = options.loadInternalPlugins !== false
-  const bot = new Bot()
+  const bot = new Bot(options)
   if (options.logErrors) {
     bot.on('error', err => console.log(err))
   }
@@ -78,14 +78,15 @@ function createBot (options = {}) {
 }
 
 class Bot extends EventEmitter {
-  constructor () {
+  constructor (options) {
     super()
+    this._options = options
     this._client = null
   }
 
-  connect (options) {
+  connect () {
     const self = this
-    self._client = mc.createClient(options)
+    self._client = mc.createClient(self._options)
     self.username = self._client.username
     self._client.on('session', () => {
       self.username = self._client.username
